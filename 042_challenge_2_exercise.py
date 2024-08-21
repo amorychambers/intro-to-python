@@ -107,13 +107,35 @@ groups_to_check_example = [
   [(0, 2), (1, 1), (2, 0)]
 ]
 
+# This function creates the groups to check for a successful string of three
 def create_groups(board_size):
   groups_to_check = []
-  for x in range(0, board_size):
-    row = []
-    for y in range(0, board_size):
-      row.append((x, y))
-    groups_to_check.append(row)
+
+  # Nested for loops used to calculate groups of three rows and columns based on any board size grid
+  # for x in range(board_size):
+  #   row = []
+  #   column = []
+  #   for y in range(board_size):
+  #     row.append((x, y))
+  #     column.append((y, x))
+    # groups_to_check.append(row)
+    # groups_to_check.append(column)
+
+  for x in range(board_size - 1):
+    diagonal = []
+    for y in range(board_size):
+      diagonal.append((y, y))
+  groups_to_check.append(diagonal)
+    
+  diagonal_list = []
+  for x in range(board_size):
+    reverse_diagonal = []
+    for y in range(board_size - 1, -1, -1):
+      reverse_diagonal.append((x, y))
+    diagonal_list.append(reverse_diagonal[(x)])
+  
+  groups_to_check.append(diagonal_list)
+
   return groups_to_check
 
 def is_game_over(board):
