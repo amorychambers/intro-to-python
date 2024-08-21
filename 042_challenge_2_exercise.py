@@ -28,19 +28,29 @@
 # optional. Don't forget about your assessment!
 
 def play_game():
-  board = [
-    [".", ".", "."],
-    [".", ".", "."],
-    [".", ".", "."]
-  ]
+  board_size = int(input("Enter a grid size for the board: "))
+  board = create_board(board_size)
   player = "X"
   while not is_game_over(board):
     print(print_board(board))
     print("It's " + player + "'s turn.")
     # `input` asks the user to type in a string
     # We then need to convert it to a number using `int`
-    row = int(input("Enter a row: "))
-    column = int(input("Enter a column: "))
+    i = 0
+    while i < 1:
+      row = int(input("Enter a row: "))
+      column = int(input("Enter a column: "))
+      if len(board) >= row:
+        if len(board[row]) >= column:
+          if board[row][column] == ".":
+            i += 1
+          else: 
+            print("That spot's already taken!")
+        else:
+          print("That spot doesn't exist!")
+      else:
+        print("That spot doesn't exist!")
+    i = 0
     board = make_move(board, row, column, player)
     if player == "X":
       player = "O"
@@ -83,7 +93,7 @@ def are_all_cells_the_same(board, coord_1, coord_2, coord_3):
 
 # We'll make a list of groups to check:
 
-groups_to_check = [
+groups_to_check_example = [
   # Rows
   [(0, 0), (0, 1), (0, 2)],
   [(1, 0), (1, 1), (1, 2)],
@@ -97,6 +107,15 @@ groups_to_check = [
   [(0, 2), (1, 1), (2, 0)]
 ]
 
+def create_groups(board_size):
+  groups_to_check = []
+  for x in range(0, board_size):
+    row = []
+    for y in range(0, board_size):
+      row.append((x, y))
+    groups_to_check.append(row)
+  return groups_to_check
+
 def is_game_over(board):
   # We go through our groups
   for group in groups_to_check:
@@ -106,9 +125,23 @@ def is_game_over(board):
       if are_all_cells_the_same(board, group[0], group[1], group[2]):
         return True # We found a winning row!
         # Note that return also stops the function
-  return False # If we get here, we didn't find a winning row
+  all_spots = "".join(board[0]) + "".join(board[1]) + "".join(board[2])
+  if "." not in all_spots:
+    return True
+  else:
+    return False # If we get here, we didn't find a winning row
 
-# And test it out:
+
+# This function creates a board based on a grid size taken from the user
+def create_board(board_size):
+  board = []
+  for x in range(0, board_size):
+    new_row = []
+    board.append(new_row)
+    for y in range(0, board_size):
+      board[x].append(".")
+  return board
+
 
 print("Game time!")
-play_game()
+print(create_groups(3))
