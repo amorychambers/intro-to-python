@@ -121,20 +121,36 @@ def create_groups(board_size):
     # groups_to_check.append(row)
     # groups_to_check.append(column)
 
-  for x in range(board_size - 1):
-    diagonal = []
-    for y in range(board_size):
-      diagonal.append((y, y))
-  groups_to_check.append(diagonal)
-    
-  diagonal_list = []
-  for x in range(board_size):
-    reverse_diagonal = []
-    for y in range(board_size - 1, -1, -1):
-      reverse_diagonal.append((x, y))
-    diagonal_list.append(reverse_diagonal[(x)])
+  # backslash_diagonals = []
+  # for x in range(board_size):
+  #   diagonal = []
+  #   for y in range(3):
+  #     diagonal.append((x + y, x + y))
+  #   backslash_diagonals.append(diagonal)
   
-  groups_to_check.append(diagonal_list)
+  # groups_to_check.extend(backslash_diagonals)
+    
+  # forwardslash_diagonals = []
+  # for x in range(board_size):
+  #   diagonal = []
+  #   coordinate = ()
+  #   for y in range(2, -1, -1):
+  #     coordinate += (x, y)
+  #   diagonal.append(coordinate)
+  #   forwardslash_diagonals.append(diagonal)
+  
+  # groups_to_check.extend(forwardslash_diagonals)
+
+  my_list = list(range(board_size))
+  reverse_list = my_list[::-1]
+  new_list = []
+  for x in range(board_size):
+    new_list.append((my_list[x], reverse_list[x]))
+  
+  sublists = [new_list[i:i + 3] for i in range(0, len(new_list), 1)] 
+  print(new_list)
+  print(sublists)
+
 
   return groups_to_check
 
@@ -166,4 +182,4 @@ def create_board(board_size):
 
 
 print("Game time!")
-print(create_groups(3))
+print(create_groups(5))
