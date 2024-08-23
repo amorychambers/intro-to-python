@@ -129,40 +129,47 @@ def create_groups(board_size):
             column.append((y, x))
         groups_to_check.append(row)
         groups_to_check.append(column)
-
-    x_coords = list(range(0, board_size))
-    y_coords = list(range(0, board_size))
-    invert_y_coords = reversed(y_coords)
     diagonals = []
-    forwards = []
-    backwards = []
-    for x, y in zip(x_coords, y_coords):
-        forwards.append((x, y))
-        # forwards.append((x, y + 1))
-        # forwards.append((x, y + 2))
-        # forwards.append((x, y - 1))
-        # forwards.append((x, y - 2))
-        # Use z loop for range of calculated board_size remainder, maybe modulo, to work out how many times you need to add and minus one to y
+  
 
-    valid_forward = [x for x in forwards if x[0] in range(board_size) and x[1] in range(board_size)]
-    forward_triples = [valid_forward[i:i + 3] for i in range(0, len(valid_forward), 1)]
-    diagonals.extend(forward_triples)
-
-    for x, y in zip(x_coords, invert_y_coords):
-        backwards.append((x, y))
-        # backwards.append((x + 1, y))
-        # backwards.append((x + 2, y))
-        # backwards.append((x - 1, y))
-        # backwards.append((x - 2, y))
-    valid_backward = [x for x in backwards if x[0] in range(board_size) and x[1] in range(board_size)]
-    backward_triples = [valid_backward[i:i + 3] for i in range(0, len(valid_backward), 1)]
-    diagonals.extend(backward_triples)
+    for z in range((board_size * -1), board_size, 1):
+        diagonals.extend(create_diagonals(board_size, z))
 
     wins = [x for x in diagonals if len(x) == 3]
 
     groups_to_check.extend(wins)
 
     return groups_to_check
+
+
+def create_diagonals(board_size, i):
+    x_coords = list(range(0, board_size))
+    y_coords = list(range(0, board_size))
+    invert_y_coords = reversed(y_coords)
+
+    diagonals = []
+    forwards = []
+    backwards = []
+    for x, y in zip(x_coords, y_coords):
+        forwards.append((x, y + i))
+
+        # Use z loop for range of calculated board_size remainder, maybe modulo, to work out how many times you need to add and minus one to y
+    valid_forward = [x for x in forwards if x[0] in range(
+        board_size) and x[1] in range(board_size)]
+    forward_triples = [valid_forward[i:i + 3]
+                       for i in range(0, len(valid_forward), 1)]
+    diagonals.extend(forward_triples)
+    for x, y in zip(x_coords, invert_y_coords):
+        backwards.append((x + i, y))
+
+    valid_backward = [x for x in backwards if x[0]
+                      in range(board_size) and x[1] in range(board_size)]
+    backward_triples = [valid_backward[i:i + 3]
+                        for i in range(0, len(valid_backward), 1)]
+    diagonals.extend(backward_triples)
+
+    return diagonals
+
 
 def is_game_over(board, groups):
     # We go through our groups
